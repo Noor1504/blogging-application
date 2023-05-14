@@ -140,7 +140,7 @@ div.edit-row{
   text-align: center;
   margin-bottom: 20px;
 }
-div.post-page a.edit-btn{
+div.post-page a.edit-btn {
   background-color: #333;
   display: inline-flex;
   align-items: center;
@@ -149,6 +149,8 @@ div.post-page a.edit-btn{
   padding:15px 30px;
   border-radius: 5px;
   text-decoration: none;
+  margin-left: 20px;
+  margin-right: 30px;
 }
 a svg{
   height:20px;

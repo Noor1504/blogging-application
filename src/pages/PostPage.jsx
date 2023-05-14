@@ -3,6 +3,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { formatISO9075 } from "date-fns";
 import { UserContext } from "../UserContext";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Comment from "./Comment";
 
 export default function PostPage() {
   const { id } = useParams();
@@ -16,6 +18,29 @@ export default function PostPage() {
     });
   }, []);
 
+  const handleDelete = async (ev) => {
+    ev.preventDefault();
+    const confirmed = window.confirm(
+      "Are you sure that you want to delete this post"
+    );
+    if (confirmed) {
+      const response = await fetch("http://localhost:4000/post/" + id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        // post was successfully deleted
+        alert("Post deleted successfully");
+        navigate("/");
+      } else {
+        // there was an error deleting the post
+        console.error("Error deleting post:", response.status);
+      }
+    }
+  };
+  const navigate = useNavigate();
   return (
     <div>
       {postInfo ? (
@@ -43,6 +68,23 @@ export default function PostPage() {
                   </svg>
                   Edit this post
                 </Link>
+                <Link className="edit-btn" onClick={handleDelete}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 6L18 18M6 18l12-12"
+                    />
+                  </svg>
+                  Delete this post
+                </Link>
               </div>
             )}
             <div className="image">
@@ -54,6 +96,8 @@ export default function PostPage() {
 
             <div dangerouslySetInnerHTML={{ __html: postInfo.content }} />
           </div>
+          <hr></hr>
+          <Comment postId={id} />
         </div>
       ) : (
         <div>No info received</div>
